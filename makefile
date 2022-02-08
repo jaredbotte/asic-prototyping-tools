@@ -33,6 +33,10 @@ vpath %.sdc $(wildcard ._*)
 %: %.sof
 	quartus_pgm -m jtag -o "p;$<"
 
+%_compile: %.sv %.tcl %.sdc
+	quartus_sh --64bit -t $(word 2,$^)
+	quartus_map --64bit $* -c $*
+
 clean:
 	@rm -rf *.qpf
 	@rm -rf *.qsf
