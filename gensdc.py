@@ -7,12 +7,12 @@
 
 # This Python script generates the appropriate .sdc file for the Altera DE2-115 development board.
 # It uses the pin description file from ECE 437, and is based on the SDC section of the ECE 437
-# 'synthesize' script (Credit: Eric Villasenor [evillase@gmail.com]
+# 'synthesize' script (Credit: Eric Villasenor [evillase@gmail.com])
 
 import os
 import sys
 
-# I am going to expect this script to get called from a makefile, so I am not going to provide much error checking
+# I am going to expect this script to only get called from a makefile, so I am not going to provide much error checking
 # in terms of checking command line arguments. 
 
 args = sys.argv[1:]

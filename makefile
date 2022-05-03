@@ -6,10 +6,12 @@
 # This makefile compiles and downloads a design to the board. It also makes sure it connects the pins...
 
 SRCDIR = source
+DPATHDIR = datapath  # Only used for FIR filter lab
 
 CLKFREQ := 100
 
 vpath %.sv $(SRCDIR)
+vpath %.sv $(DPATHDIR)
 vpath %.tcl $(wildcard ._*)
 vpath %.sdc $(wildcard ._*)
 
