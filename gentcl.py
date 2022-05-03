@@ -68,6 +68,9 @@ set_global_assignment -name EDA_SIMULATION_TOOL "ModelSim (Verilog)"
 set_global_assignment -name EDA_OUTPUT_DATA_FORMAT "Verilog" -section_id eda_simulation
 """
 
+## The below section adds all existing .sv, .v, .vh, and .vhd files to the compilation rule so that they can be seen
+## when it comes time to synthsize and map them. Currently, the 'source' and 'datapath' directories are searched.
+
 with open(os.path.join(outdir, tcl_filename), 'w') as tcl_file:
     tcl_file.writelines(preamble)
     for source_file in os.listdir(os.path.join(os.getcwd(), "source")):
@@ -75,14 +78,34 @@ with open(os.path.join(outdir, tcl_filename), 'w') as tcl_file:
         ext = os.path.splitext(source_file)[1]
         if(ext == ".sv"):
             filetype = "SYSTEMVERILOG_FILE"
-        elif (ext == ".v"):
-            filetype = "VHDL_FILE"
-        elif (ext == ".vhd"):
+        elif (ext == ".v" or ext == ".vh"):
             filetype = "VERILOG_FILE"
+        elif (ext == ".vhd"):
+            filetype = "VHDL_FILE"
 
         if filetype != "":
             tcl_file.write(f"set_global_assignment -name {filetype} {os.path.join(os.getcwd(), 'source', source_file)}\n")
-        
+
+    try:
+        dpath_files = os.listdir(os.path.join(os.getcwd(), "datapath"))
+    except FileNotFoundError:
+        dpath_files = []
+        print("Did not find datapath directory.")
+
+    for datapath_file in dpath_files:
+        filetype = ""
+        ext = os.path.splitext(datapath_file)[1]
+        if(ext == ".sv"):
+            filetype = "SYSTEMVERILOG_FILE"
+        elif (ext == ".v" or ext == ".vh"):
+            filetype = "VERILOG_FILE"
+        elif (ext == ".vhd"):
+            filetype = "VHDL_FILE"
+
+        if filetype != "":
+            tcl_file.write(f"set_global_assignment -name {filetype} {os.path.join(os.getcwd(), 'datapath', datapath_file)}\n")
+
+
     tcl_file.write("\n\n")
     with open(os.path.join(toolsdir, "EP4CE115")) as pins:
         tcl_file.write(pins.read())
